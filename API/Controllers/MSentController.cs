@@ -2,7 +2,7 @@
 =============================================
 Author      : <ยุทธภูมิ ตวันนา>
 Create date : <๑๑/๐๒/๒๕๖๔>
-Modify date : <๑๑/๐๒/๒๕๖๔>
+Modify date : <๑๘/๐๒/๒๕๖๔>
 Description : <>
 =============================================
 */
@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using Newtonsoft.Json;
 
@@ -53,19 +54,30 @@ namespace API.Controllers
 		}
 	}
 
-	[RoutePrefix("MSent")]
 	public class MSentController : ApiController
 	{
-		[Route("Version")]
+		[Route("~/Accepted")]
 		[HttpGet]
-		public HttpResponseMessage MSent(string userCode)
+		public HttpResponseMessage MSent(
+			string route,
+			string id = "",
+			string userCode = ""
+		)
 		{
-			var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://dcu-sitapi.mahidol.ac.th/service/api/v1/version?userCode=" + userCode);
+			string domain = "https://dcu-sitapi.mahidol.ac.th/service/api/v1/";
+			string param = String.Empty;
+
+			if (route.Equals("Version"))						param = ("?userCode=" + userCode);
+			if (route.Equals("TermsAndConditions")) param += ("?termsAndCondId=" + id + "&userCode=" + userCode);
+			if (route.Equals("PrivacyPolicy"))			param += ("?privacyPolicyId=" + id + "&userCode=" + userCode);
+			if (route.Equals("Consent"))						param += ("?consentId=" + id + "&userCode=" + userCode);
+
+			var httpWebRequest = (HttpWebRequest)WebRequest.Create(domain + route.ToLower() + param);
 			httpWebRequest.ContentType = "application/json";
 			httpWebRequest.Method = "GET";
-			httpWebRequest.Headers["language"] = "TH";
-			httpWebRequest.Headers["api-client-id"] = "SIT_KEY_EPROFILE";
-			httpWebRequest.Headers["api-client-secret"] = "d0d96380-aae2-4ebf-9f5b-d771395dfaf8";
+			httpWebRequest.Headers["language"] = HttpContext.Current.Request.Headers["lang"];
+			httpWebRequest.Headers["api-client-id"] = HttpContext.Current.Request.Headers["clientid"];
+			httpWebRequest.Headers["api-client-secret"] = HttpContext.Current.Request.Headers["clientsecret"];
 
 			var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
 			using (var sr = new StreamReader(httpWebResponse.GetResponseStream()))

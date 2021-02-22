@@ -67,3 +67,4 @@ D:\Programming\MSent\Profile\API\obj\Release\API.csproj.CoreCompileInputs.cache
 D:\Programming\MSent\Profile\API\obj\Release\API.csproj.CopyComplete
 D:\Programming\MSent\Profile\API\obj\Release\API.dll
 D:\Programming\MSent\Profile\API\obj\Release\API.pdb
+D:\Programming\MSent\Profile\API\obj\Release\API.csprojAssemblyReference.cache
