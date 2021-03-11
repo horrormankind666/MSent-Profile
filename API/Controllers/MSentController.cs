@@ -64,7 +64,7 @@ namespace API.Controllers
 			string userCode = ""
 		)
 		{
-			string domain = "https://dcu-sitapi.mahidol.ac.th/service/api/v1/";
+			string domain = System.Configuration.ConfigurationManager.AppSettings["MSentAPIURL"].ToString();
 			string param = String.Empty;
 
 			if (route.Equals("Version"))						param = ("?userCode=" + userCode);
